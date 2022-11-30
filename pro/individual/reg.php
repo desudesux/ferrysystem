@@ -58,15 +58,29 @@ $me = $_SESSION['user_id'];
                                 <td><?php echo $fullname =  getRoutePath($fetch['route_id']);
                                         ?></td>
                                 <td><?php $array = getTotalBookByType($id);
-                                        echo ($max_first = ($array['first'] - $array['first_booked'])), " Seat(s) Available for First Class" . "<hr/>" . ($max_second = ($array['second'] - $array['second_booked'])) . " Seat(s) Available for Second Class";
+                                        echo ($max_first = ($array['first'] - $array['first_booked'])), " Seat(s) Available";
                                         ?></td>
                                 <td><?php echo $fetch['date'], " / ", formatTime($fetch['time']); ?></td>
-
                                 <td>
+                                <?php                                 
+                                    $mcap_check = connect()->query("SELECT train.first_seat as first FROM schedule INNER JOIN train ON train.id = schedule.train_id WHERE schedule.id = '$id'")->fetch_assoc();
+                                    $ncap_check =  connect()->query("SELECT SUM(no) as no FROM `booked` WHERE schedule_id = '$id' AND class = 'first'")->fetch_assoc();
+                                    $maxcap = $mcap_check['first'];
+                                    $occupied_seat = $ncap_check['no'];
+                                    if($maxcap > $occupied_seat){                                             
+                                ?>
+
                                     <button type="button" class="btn btn-info" data-toggle="modal"
                                         data-target="#book<?php echo $id ?>">
                                         Book
                                     </button>
+                                
+                                <?php }else{ ?>
+                                    <button type="button" class="btn btn-danger" data-toggle="modal"
+                                        data-target="#book<?php echo $id ?> disable">
+                                        Full
+                                    </button>
+                                <?php } ?>
                                 </td>
                             </tr>
 
@@ -77,7 +91,7 @@ $me = $_SESSION['user_id'];
                                             <h4 class="modal-title">Book For <?php echo $fullname;
 
 
-                                                                                    ?> &#128642;</h4>
+                                                                                    ?> &#9972;</h4>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
@@ -92,7 +106,7 @@ $me = $_SESSION['user_id'];
 
                                                 <p>Number of Tickets (If you are the only one, leave as it is) :
                                                     <input type="number" min='1' value="1"
-                                                        max='<?php echo $max_first >= $max_second ? $max_first : $max_second ?>'
+                                                        max='<?php echo $max_first >=  $array['first_booked'] ? $max_first :  $array['first_booked'] ?>'
                                                         name="number" class="form-control" id="">
                                                 </p>
                                                 <p>
@@ -103,12 +117,8 @@ $me = $_SESSION['user_id'];
                                                     </select>
                                                 </p>
                                                 <p>
-                                                    Class : <select name="class" required class="form-control" id="">
-                                                        <option value="">-- Select Class --</option>
-                                                        <option value="first">First Class ($
-                                                            <?php echo ($fetch['first_fee']); ?>)</option>
-                                                        <option value="second">Second Class ($
-                                                            <?php echo ($fetch['second_fee']); ?>)</option>
+                                                    Available Seat : <input type="text" value="<?php echo 'Seat(s) Available: '.($max_first); ?>" class="form-control" id="" readonly disabled>
+
                                                     </select>
                                                 </p>
                                                 <input type="submit" name="submit" class="btn btn-success"

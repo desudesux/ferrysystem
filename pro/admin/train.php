@@ -16,7 +16,7 @@ $me = "?page=$source";
                                 All Ferry</h3>
                             <div class='float-right'>
                                 <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#add">
-                                    Add New Ferry &#128645;
+                                    Add New Ferry &#9972;
                                 </button>
                             </div>
                         </div>
@@ -29,8 +29,7 @@ $me = "?page=$source";
                                         <tr>
                                             <th>#</th>
                                             <th>Ferry Name</th>
-                                            <th>First Class Seat</th>
-                                            <th>Second Class Seat</th>
+                                            <th>Seat Capacity</th>
                                             <th style="width: 30%;">Action</th>
                                         </tr>
                                     </thead>
@@ -47,7 +46,6 @@ $me = "?page=$source";
                                                 <td><?php echo ++$sn; ?></td>
                                                 <td><?php echo $fullname = $fetch['name']; ?></td>
                                                 <td><?php echo $fetch['first_seat']; ?></td>
-                                                <td><?php echo $fetch['second_seat']; ?></td>
                                                 <td>
                                                     <form method="POST">
                                                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#edit<?php echo $fetch['id']; ?>">
@@ -118,7 +116,7 @@ $me = "?page=$source";
     <div class="modal-dialog modal-lg">
         <div class="modal-content" align="center">
             <div class="modal-header">
-                <h4 class="modal-title">Add New Ferry &#128646;
+                <h4 class="modal-title">Add New Ferry &#9972;
                 </h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -133,14 +131,9 @@ $me = "?page=$source";
                             <td><input type="text" class="form-control" name="name" required minlength="3" id=""></td>
                         </tr>
                         <tr>
-                            <th>First Class Capacity</th>
+                            <th>Seat Capacity</th>
                             <td><input type="number" min='0' class="form-control" name="first_seat" required id=""></td>
-                        </tr>
-                        <tr>
-                            <th>Second Class Capacity</th>
-                            <td><input type="number" min='0' class="form-control" name="second_seat" required id="">
-                            </td>
-                        </tr>
+                        </tr>                        
                         <tr>
                             <td colspan="2">
 
@@ -165,8 +158,7 @@ $me = "?page=$source";
 if (isset($_POST['submit'])) {
     $name = $_POST['name'];
     $first_seat = $_POST['first_seat'];
-    $second_seat = $_POST['second_seat'];
-    if (!isset($name, $first_seat, $second_seat)) {
+    if (!isset($name, $first_seat)) {
         alert("Fill Form Properly!");
     } else {
         $conn = connect();
@@ -175,8 +167,8 @@ if (isset($_POST['submit'])) {
         if ($check) {
             alert("Train exists");
         } else {
-            $ins = $conn->prepare("INSERT INTO train (name, first_seat, second_seat) VALUES (?,?,?)");
-            $ins->bind_param("sss", $name, $first_seat, $second_seat);
+            $ins = $conn->prepare("INSERT INTO train (name, first_seat) VALUES (?,?)");
+            $ins->bind_param("ss", $name, $first_seat);
             $ins->execute();
             alert("Ferry Added!");
             load($_SERVER['PHP_SELF'] . "$me");
@@ -187,9 +179,8 @@ if (isset($_POST['submit'])) {
 if (isset($_POST['edit'])) {
     $name = $_POST['name'];
     $first_seat = $_POST['first_seat'];
-    $second_seat = $_POST['second_seat'];
     $id = $_POST['id'];
-    if (!isset($name, $first_seat, $second_seat)) {
+    if (!isset($name, $first_seat)) {
         alert("Fill Form Properly!");
     } else {
         $conn = connect();
@@ -198,8 +189,8 @@ if (isset($_POST['edit'])) {
         if ($check == 2) {
             alert("Train name exists");
         } else {
-            $ins = $conn->prepare("UPDATE train SET name = ?, first_seat = ?, second_seat = ? WHERE id = ?");
-            $ins->bind_param("sssi", $name, $first_seat, $second_seat, $id);
+            $ins = $conn->prepare("UPDATE train SET name = ?, first_seat = ? WHERE id = ?");
+            $ins->bind_param("ssi", $name, $first_seat, $id);
             $ins->execute();
             alert("Train Modified!");
             load($_SERVER['PHP_SELF'] . "$me");

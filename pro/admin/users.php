@@ -102,7 +102,7 @@ if (isset($_GET['status'], $_GET['id'])) {
     <div class="modal-dialog modal-lg">
         <div class="modal-content" align="center">
             <div class="modal-header">
-                <h4 class="modal-title">Add New Schedule &#128649;
+                <h4 class="modal-title"> &#128649;
                 </h4>
 
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">

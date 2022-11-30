@@ -19,7 +19,7 @@ date_default_timezone_set("Asia/Bangkok");
 $date = date('D, d-M-Y h:i:s A');;
 $date_small = date('d-M-Y');;
 //INSERT YOUR OWN PAYSTACK API KEYS
-$paystack = "sk_test_2a720be0e29e2c82b202875f1acb4c5ca7c90340"; //Do not change this! Redirect URL http://localhost/train/pro/verify.php
+$paystack = "sk_test_cfbe1353ff7025c4419d44b4a750f035aa251a15"; //Do not change this! Redirect URL http://localhost/train/pro/verify.php
 if (!function_exists('connect')) {
 
     function connect()
@@ -275,7 +275,7 @@ function sendMail($to, $subject, $msg)
 function genSeat($id, $type, $number)
 {
     $conn = connect();
-    $type_seat = $conn->query("SELECT train.first_seat as first, train.second_seat as second FROM schedule INNER JOIN train ON train.id = schedule.train_id WHERE schedule.id = '$id'")->fetch_assoc();
+    $type_seat = $conn->query("SELECT train.first_seat as first FROM schedule INNER JOIN train ON train.id = schedule.train_id WHERE schedule.id = '$id'")->fetch_assoc();
     $me = $type_seat[$type];
     $query = $conn->query("SELECT SUM(no) AS no FROM booked WHERE schedule_id = '$id' AND class = '$type'")->fetch_assoc();
     $no = $query['no'];
@@ -447,38 +447,38 @@ function getfreefareFromschedule($id)
 function getTotalBookByType($id)
 {
 
-    $con =  connect()->query("SELECT SUM(no) as no FROM `booked` WHERE schedule_id = '$id' AND class = 'second'")->fetch_assoc();
-    $con2 =  connect()->query("SELECT SUM(no) as no FROM `booked` WHERE schedule_id = '$id' AND class = 'first'")->fetch_assoc();
+    $con =  connect()->query("SELECT SUM(no) as no FROM `booked` WHERE schedule_id = '$id' AND class = 'first'")->fetch_assoc();
+    
     $no = $con['no'];
-    $no2 = $con2['no'];
+   
     $num = $no == null ? 0 :  $con['no'];
-    $num2 = $no2 == null ? 0 :  $con2['no'];
-    $qu = connect()->query("SELECT train.first_seat as first, train.second_seat as second FROM schedule INNER JOIN train ON train.id = schedule.train_id WHERE schedule.id = '$id'")->fetch_assoc();
+  
+    $qu = connect()->query("SELECT train.first_seat as first FROM schedule INNER JOIN train ON train.id = schedule.train_id WHERE schedule.id = '$id'")->fetch_assoc();
     $first = $qu['first'];
-    $second = $qu['second'];
+  
     $first = intval($first);
-    $second = intval($second);
+
     $num = intval($num);
-    $num2 = intval($num2);
-    return array("first" => $first, "second" => $second, "first_booked" => $num, "second_booked" => $num2);
+  
+    return array("first" => $first, "first_booked" => $num);
 }
 function getTotalBookByType2($id)
 {
 
-    $con =  connect()->query("SELECT SUM(no) as no FROM `booked` WHERE schedule_id = '$id' AND class = 'second'")->fetch_assoc();
-    $con2 =  connect()->query("SELECT SUM(no) as no FROM `booked` WHERE schedule_id = '$id' AND class = 'first'")->fetch_assoc();
+    $con =  connect()->query("SELECT SUM(distinct booked.no) as no,train.first_seat FROM `booked` WHERE schedule_id = '$id' AND class = 'first'")->fetch_assoc();
+    
     $no = $con['no'];
-    $no2 = $con2['no'];
+    
     $num = $no == null ? 0 :  $con['no'];
-    $num2 = $no2 == null ? 0 :  $con2['no'];
-    $qu = connect()->query("SELECT train.first_seat as first, train.second_seat as second FROM archive INNER JOIN train ON train.id = archive.train_id WHERE archive.id = '$id'")->fetch_assoc();
+  
+    $qu = connect()->query("SELECT train.first_seat as first FROM archive INNER JOIN train ON train.id = archive.train_id WHERE archive.id = '$id'")->fetch_assoc();
     $first = $qu['first'];
-    $second = $qu['second'];
+
     $first = intval($first);
-    $second = intval($second);
+
     $num = intval($num);
-    $num2 = intval($num2);
-    return array("first" => $first, "second" => $second, "first_booked" => $num, "second_booked" => $num2);
+
+    return array("first" => $first, "first_booked" => $num);
 }
 function isScheduleActive($id)
 {
@@ -645,7 +645,7 @@ table th{font-weight:italic}
 <tr><td colspan="2" style="text-align:center"><b>Trip Detail</b></td></tr>
 <tr><th><b>Route:</b></th><td>$route</td></tr>
 <tr><th><b>Train:</b></th><td>$train</td></tr>
-<tr><th><b>Class:</b></th><td>$class Class</td></tr>
+<tr><th><b>Class:</b></th><td>Regular Seat</td></tr>
 <tr><th><b>Seat Number:</b></th><td>$seat</td></tr>
 <tr><th><b>Date:</b></th><td>$date</td></tr>
 <tr><th><b>Time:</b></th><td>$time</td></tr>

@@ -28,13 +28,12 @@ if (isset($_GET['free'], $_GET['id'])) {
                                 All Dynamic Schedules</h3>
                             <div class='float-right'>
                                 <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#add">
-                                    Add New One-Time Schedule &#128645;
+                                    Add New One-Time Schedule &#9972;
                                 </button> - - - <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#add2">
-                                    Add Range Schedule &#128645;
+                                    Add Range Schedule &#9972;
                                 </button>
                             </div>
                         </div>
-
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table id="example1" style="align-items: stretch;" class="table table-hover w-100 table-bordered table-striped<?php //
@@ -44,8 +43,7 @@ if (isset($_GET['free'], $_GET['id'])) {
                                             <th>#</th>
                                             <th>Ferry</th>
                                             <th>Route</th>
-                                            <th>F.C Fee</th>
-                                            <th>S.C Fee</th>
+                                            <th>Ticket Fee</th>
                                             <th>Total Bookings</th>
                                             <th>Date/Time</th>
                                             <th>Actions</th>
@@ -65,9 +63,8 @@ if (isset($_GET['free'], $_GET['id'])) {
                                                 <td><?php echo getRoutePath($fetch['route_id']);
                                                     $fullname = " Schedule" ?></td>
                                                 <td>₱ <?php echo ($fetch['first_fee']); ?></td>
-                                                <td>₱ <?php echo ($fetch['second_fee']); ?></td>
                                                 <td><?php $array = getTotalBookByType($id);
-                                                    echo (($array['first'] - $array['first_booked'])), " Seat(s) Available for First Class" . "<hr/>" . ($array['second'] - $array['second_booked']) . " Seat(s) Available for Second Class";
+                                                    echo (($array['first'] - $array['first_booked'])), " Seat(s) Available";
                                                     ?></td>
                                                 <td><?php echo $fetch['date'], " / ", formatTime($fetch['time']); ?></td>
 
@@ -143,11 +140,8 @@ if (isset($_GET['free'], $_GET['id'])) {
                                                                     </select>
                                                                 </p>
                                                                 <p>
-                                                                    First Class Charge : <input class="form-control" type="number" value="<?php echo $fetch['first_fee'] ?>" name="first_fee" required id="">
-                                                                </p>
-                                                                <p>
-                                                                    Second Class Charge : <input class="form-control" type="number" value="<?php echo $fetch['second_fee'] ?>" name="second_fee" required id="">
-                                                                </p>
+                                                                    Ticket Charge : <input class="form-control" type="number" value="<?php echo $fetch['first_fee'] ?>" name="first_fee" required id="">
+                                                                </p>                                            
                                                                 <p>
                                                                     Date :
                                                                     <input type="date" class="form-control" onchange="check(this.value)" id="date" placeholder="Date" name="date" required value="<?php echo (date('Y-m-d', strtotime($fetch["date"]))) ?>">
@@ -192,7 +186,7 @@ if (isset($_GET['free'], $_GET['id'])) {
     <div class="modal-dialog modal-lg">
         <div class="modal-content" align="center">
             <div class="modal-header">
-                <h4 class="modal-title">Add New Schedule &#128649;
+                <h4 class="modal-title">Add New Schedule &#9972;
                 </h4>
 
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -200,7 +194,7 @@ if (isset($_GET['free'], $_GET['id'])) {
                 </button>
             </div>
             <div class="modal-body">
-                <form action="" method="post">
+                <form action="" method="post">        
                     <div class="row">
                         <div class="col-sm-6">
                             Ferry : <select class="form-control" name="train_id" required id="">
@@ -227,12 +221,8 @@ if (isset($_GET['free'], $_GET['id'])) {
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-6">
-                            First Class Charge : <input class="form-control" type="number" name="first_fee" required id="">
-                        </div>
-                        <div class="col-sm-6">
-
-                            Second Class Charge : <input class="form-control" type="number" name="second_fee" required id="">
+                        <div class="col-sm-12 mx-auto">
+                            Ticket Charge : <input class="form-control" type="number" name="first_fee" required id="">
                         </div>
                     </div>
                     <div class="row">
@@ -274,7 +264,7 @@ if (isset($_GET['free'], $_GET['id'])) {
     <div class="modal-dialog modal-lg">
         <div class="modal-content" align="center">
             <div class="modal-header">
-                <h4 class="modal-title">Add Range Schedule &#128649;
+                <h4 class="modal-title">Add Range Schedule &#9972;
                 </h4>
 
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -309,12 +299,8 @@ if (isset($_GET['free'], $_GET['id'])) {
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-6">
-                            First Class Charge : <input class="form-control" type="number" name="first_fee" required>
-                        </div>
-                        <div class="col-sm-6">
-
-                            Second Class Charge : <input class="form-control" type="number" name="second_fee" required>
+                        <div class="col-sm-12">
+                            Ticket Charge : <input class="form-control" type="number" name="first_fee" required>
                         </div>
                     </div>
                     <div class="row">
@@ -373,18 +359,17 @@ if (isset($_POST['submit'])) {
     $route_id = $_POST['route_id'];
     $train_id = $_POST['train_id'];
     $first_fee = $_POST['first_fee'];
-    $second_fee = $_POST['second_fee'];
     $date = $_POST['date'];
     $date = formatDate($date);
     // die($date);
     // $endDate = date('Y-m-d' ,strtotime( $data['automatic_until'] ));
     $time = $_POST['time'];
-    if (!isset($route_id, $train_id, $first_fee, $second_fee, $date, $time)) {
+    if (!isset($route_id, $train_id, $first_fee, $date, $time)) {
         alert("Fill Form Properly!");
     } else {
         $conn = connect();
-        $ins = $conn->prepare("INSERT INTO `schedule`(`train_id`, `route_id`, `date`, `time`, `first_fee`, `second_fee`) VALUES (?,?,?,?,?,?)");
-        $ins->bind_param("iissii", $train_id, $route_id, $date, $time, $first_fee, $second_fee);
+        $ins = $conn->prepare("INSERT INTO `schedule`(`train_id`, `route_id`, `date`, `time`, `first_fee`) VALUES (?,?,?,?,?)");
+        $ins->bind_param("iissi", $train_id, $route_id, $date, $time, $first_fee);
         $ins->execute();
         load($_SERVER['PHP_SELF'] . "$me");
     }
@@ -394,14 +379,13 @@ if (isset($_POST['submit'])) {
 if (isset($_POST['submit2'])) {
     $route_id = $_POST['route_id'];
     $train_id = $_POST['train_id'];
-    $first_fee = $_POST['first_fee'];
-    $second_fee = $_POST['second_fee'];
+    $first_fee = $_POST['first_fee'];    
     $from_date = $_POST['from_date'];
     $to_date = $_POST['to_date'];
     $every = $_POST['every'];
 
     $time = $_POST['time'];
-    if (!isset($route_id, $train_id, $first_fee, $second_fee, $date, $time)) {
+    if (!isset($route_id, $train_id, $first_fee, $date, $time)) {
         alert("Fill Form Properly!");
     } else {
 
@@ -414,16 +398,16 @@ if (isset($_POST['submit2'])) {
         if ($every == 'Day') {
             for ($i = strtotime($startDate); $i <= strtotime($endDate); $i = strtotime('+1 day', $i)) {
                 $date = date('d-m-Y', $i);
-                $ins = $conn->prepare("INSERT INTO `schedule`(`train_id`, `route_id`, `date`, `time`, `first_fee`, `second_fee`) VALUES (?,?,?,?,?,?)");
-                $ins->bind_param("iissii", $train_id, $route_id, $date, $time, $first_fee, $second_fee);
+                $ins = $conn->prepare("INSERT INTO `schedule`(`train_id`, `route_id`, `date`, `time`, `first_fee`) VALUES (?,?,?,?,?)");
+                $ins->bind_param("iissi", $train_id, $route_id, $date, $time, $first_fee);
                 $ins->execute();
             }
         } else {
             for ($i = strtotime($every, strtotime($startDate)); $i <= strtotime($endDate); $i = strtotime('+1 week', $i)) {
                 $date = date('d-m-Y', $i);
 
-                $ins = $conn->prepare("INSERT INTO `schedule`(`train_id`, `route_id`, `date`, `time`, `first_fee`, `second_fee`) VALUES (?,?,?,?,?,?)");
-                $ins->bind_param("iissii", $train_id, $route_id, $date, $time, $first_fee, $second_fee);
+                $ins = $conn->prepare("INSERT INTO `schedule`(`train_id`, `route_id`, `date`, `time`, `first_fee`) VALUES (?,?,?,?,?)");
+                $ins->bind_param("iissi", $train_id, $route_id, $date, $time, $first_fee);
                 $ins->execute();
             }
         }
@@ -439,17 +423,16 @@ if (isset($_POST['edit'])) {
     $route_id = $_POST['route_id'];
     $train_id = $_POST['train_id'];
     $first_fee = $_POST['first_fee'];
-    $second_fee = $_POST['second_fee'];
     $date = $_POST['date'];
     $date = formatDate($date);
     $time = $_POST['time'];
     $id = $_POST['id'];
-    if (!isset($route_id, $train_id, $first_fee, $second_fee, $date, $time)) {
+    if (!isset($route_id, $train_id, $first_fee, $date, $time)) {
         alert("Fill Form Properly!");
     } else {
         $conn = connect();
-        $ins = $conn->prepare("UPDATE `schedule` SET `train_id`=?,`route_id`=?,`date`=?,`time`=?,`first_fee`=?,`second_fee`=? WHERE id = ?");
-        $ins->bind_param("iissiii", $train_id, $route_id, $date, $time, $first_fee, $second_fee, $id);
+        $ins = $conn->prepare("UPDATE `schedule` SET `train_id`=?,`route_id`=?,`date`=?,`time`=?,`first_fee`=? WHERE id = ?");
+        $ins->bind_param("iissii", $train_id, $route_id, $date, $time, $first_fee, $id);
         $ins->execute();
         $msg = "Having considered user's satisfactions and every other things, we the management are so sorry to let inform you that there has been a change in the date and time of your trip. <hr/> New Date : $date. <br/> New Time : " . formatTime($time) . " <hr/> Kindly disregard if the date/time still stays the same.";
         $e = $conn->query("SELECT passenger.email FROM passenger INNER JOIN booked ON booked.user_id = passenger.id WHERE booked.schedule_id = '$id' ");

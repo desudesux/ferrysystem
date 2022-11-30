@@ -42,7 +42,7 @@ if (isset($_GET['reference'])) {
     exit();
   }
 
-  if ($response) {
+   if ($response) {
 
     $result = json_decode($response, true);
 
@@ -54,9 +54,9 @@ if (isset($_GET['reference'])) {
       $code = genCode($schedule_id, $user_id, $class);
       $seat = genSeat($schedule_id, $class, $number);
       $payment_id = $conn->insert_id;
-      if ($payment_id >=  0) {
+      if ($payment_id > 0) {
 
-        $conn->query("INSERT INTO booked (payment_id, schedule_id, user_id, code, class, no, date, seat) VALUES ('$payment_id','$schedule_id', '$user_id', '$code', '$class', '$number', '$date' , '$seat')");
+        $conn->query("INSERT INTO booked (payment_id, schedule_id, user_id, code, class, no, date, seat,cancel) VALUES ('$payment_id','$schedule_id', '$user_id', '$code', '$class', '$number', '$date' , '$seat','0')");
         unset($_SESSION['discount']);
         unset($_SESSION['amount']);
         unset($_SESSION['original']);

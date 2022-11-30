@@ -24,8 +24,7 @@ $source = 'payment';
                                     <tr>
                                         <th>Route</th>
                                         <th>Date</th>
-                                        <th>First Class</th>
-                                        <th>Second Class</th>
+                                        <th>Ticket Fee</th>
                                         <th>Capacity</th>
                                     </tr>
                                 </thead>
@@ -37,14 +36,13 @@ $source = 'payment';
                                     while ($val = $pay->fetch_assoc()) {
                                         $id = $val['id'];
                                         $array = getTotalBookByType($id);
-                                        // echo (($array['first'] - $array['first_booked'])), " Seat(s) Available for First Class" . "<hr/>" . ($array['second'] - $array['second_booked']) . " Seat(s) Available for Second Class";
+                                        // echo (($array['first'] - $array['first_booked'])), " Seat(s) Available" . "<hr/>" . ($array['second'] - $array['second_booked']) . " Seat(s) Available for Second Class";
                                         $sn++;
                                         echo "<tr>
                                       <td>" . getRoutePath($val['route_id']) . "</td>
                                       <td>" . $val['date'] . " - " . formatTime($val['time']) . "</td>
                                       <td>₱ " . sum($val['id'], 'first') . "</td>
-                                      <td>₱ " . sum($val['id'], 'second') . "</td>
-                                      <td>" . (($array['first'] - $array['first_booked'])), " Seat(s) Available for First Class" . "<hr/>" . ($array['second'] - $array['second_booked']) . " Seat(s) Available for Second Class" . "</td>
+                                      <td>" . (($array['first'] - $array['first_booked'])), " Seat(s) Available". "</td>
                                       </tr>";
                                     }
                                     ?>

@@ -48,8 +48,8 @@ if (!isset($file_access)) die("Direct File Access Denied");
                                     $sn++;
                                     echo "<tr>
                                     <td>$sn</td>
-                                    <td><b>" . $row['description'] . "</b></td>
-                                    <td>" . ($row['policy'] == NULL ? '-- No Response Yet --' : $row['policy']) . "</b></td>
+                                    <td><b>" . $row['entry'] . "</b></td>
+                                    <td>" . ($row['description'] == NULL ? '-- No Response Yet --' : $row['description']) . "</b></td>
                                     </tr>";
                                 }
                                 ?>
@@ -116,11 +116,7 @@ if (!isset($file_access)) die("Direct File Access Denied");
                                     $_SESSION['schedule'] =  $schedule_id;
                                     $_SESSION['no'] =  $number;
                                     $_SESSION['class'] =  $class;
-                                    }
-                                   
-                                    
-                                    
-                                    
+                                    }                                                                                                                                               
                                   
                                     ?>
                                    

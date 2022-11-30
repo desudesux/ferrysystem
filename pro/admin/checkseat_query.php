@@ -11,4 +11,6 @@
 			mysqli_query($conn, "DELETE FROM `schedule` WHERE `id` = '$fetch[id]'") or die(mysqli_error($conn));
 		}
 	}
+
+    
 ?>

@@ -26,8 +26,7 @@ $me = "?page=$source";
                                             <th>#</th>
                                             <th>Ferry</th>
                                             <th>Route</th>
-                                            <th>F.C Fee</th>
-                                            <th>S.C Fee</th>
+                                            <th>Ticket Fee</th>
                                             <th>Total Bookings</th>
                                             <th>Date/Time</th>
                                             <th>Actions</th>
@@ -46,9 +45,8 @@ $me = "?page=$source";
                                                 <td><?php echo getRoutePath($fetch['route_id']);
                                                     $fullname = " Schedule" ?></td>
                                                 <td>₱ <?php echo ($fetch['first_fee']); ?></td>
-                                                <td>₱ <?php echo ($fetch['second_fee']); ?></td>
                                                 <td><?php $array = getTotalBookByType2($id);
-                                                    echo (($array['first'] - $array['first_booked'])), " Seat(s) Available for First Class" . "<hr/>" . ($array['second'] - $array['second_booked']) . " Seat(s) Available for Second Class";
+                                                    echo (($array['first'] - $array['first_booked'])), " Seat(s) Available";
                                                     ?></td>
                                                 <td><?php echo $fetch['date'], " / ", formatTime($fetch['time']); ?></td>
 
@@ -131,11 +129,7 @@ $me = "?page=$source";
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
-                            First Class Charge : <input class="form-control" type="number" name="first_fee" required id="">
-                        </div>
-                        <div class="col-sm-6">
-
-                            Second Class Charge : <input class="form-control" type="number" name="second_fee" required id="">
+                            Ticket Charge : <input class="form-control" type="number" name="first_fee" required id="">
                         </div>
                     </div>
                     <div class="row">
@@ -184,71 +178,6 @@ $me = "?page=$source";
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <form action="" method="post">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            Ferry : <select class="form-control" name="train_id" required id="">
-                                <option value="">Select Ferry</option>
-                                <?php
-                                $con = connect()->query("SELECT * FROM train");
-                                while ($row = $con->fetch_assoc()) {
-                                    echo "<option value='" . $row['id'] . "'>" . $row['name'] . "</option>";
-                                }
-                                ?>
-                            </select>
-
-                        </div>
-                        <div class="col-sm-6">
-                            Route : <select class="form-control" name="route_id" required id="">
-                                <option value="">Select Route</option>
-                                <?php
-                                $con = connect()->query("SELECT * FROM route");
-                                while ($row = $con->fetch_assoc()) {
-                                    echo "<option value='" . $row['id'] . "'>" . getRoutePath($row['id']) . "</option>";
-                                }
-                                ?>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            First Class Charge : <input class="form-control" type="number" name="first_fee" required>
-                        </div>
-                        <div class="col-sm-6">
-
-                            Second Class Charge : <input class="form-control" type="number" name="second_fee" required>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            From Date : <input class="form-control" onchange="check(this.value)" type="date" name="from_date" required>
-                        </div>
-                        <div class="col-sm-6">
-                            End Date : <input class="form-control" onchange="check(this.value)" type="date" name="to_date" required>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-6"> Every :
-                            <select class="form-control" name="every">
-                                <option value="Day">Day</option>
-                                <option value="Monday">Monday</option>
-                                <option value="Tuesday">Tuesday</option>
-                                <option value="Wednesday">Wednesday</option>
-                                <option value="Thursday">Thursday</option>
-                                <option value="Friday">Friday</option>
-                                <option value="Saturday">Saturday</option>
-                                <option value="Sunday">Sunday</option>
-                            </select>
-                        </div>
-                        <div class="col-sm-6">
-
-                            Time : <input class="form-control" type="time" name="time" required id="">
-                        </div>
-                    </div>
-                    <hr>
-                    <input type="submit" name="submit2" class="btn btn-success" value="Add Schedule"></p>
-                </form>
 
                 <script>
                     function check(val) {

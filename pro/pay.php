@@ -25,7 +25,7 @@
       'email' => $email,
     ]),
     CURLOPT_HTTPHEADER => [
-      "authorization: Bearer sk_test_2a720be0e29e2c82b202875f1acb4c5ca7c90340", //replace this with your own test key
+      "authorization: Bearer $paystack", //replace this with your own test key
       "content-type: application/json",
       "cache-control: no-cache"
     ],

@@ -77,7 +77,7 @@ if (isset($_GET['now'])) {
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <h4 class="modal-title">Details For - <?php echo $fullname; ?>
-                                                        <span class="">&#128669;</span>
+                                                        <span class="">&#9972;</span>
                                                     </h4>
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
